@@ -3,6 +3,33 @@ const WyreClient = require('@wyre/api').WyreClient;
 const WYRE_TEST_API = 'https://api.testwyre.com';
 const WYRE_API = 'https://api.sendwyre.com';
 
+const account = {
+  "type":"INDIVIDUAL",
+  "country": "US",
+  "subaccount": true,
+  "profileFields":[
+    {
+      "fieldId": "individualLegalName",
+      "value": "Johnny Quest"
+    },
+    {
+      "fieldId": "individualEmail",
+      "value": "JohnnyQuest22@yolo.com"
+    },
+    {
+      "fieldId": "individualResidenceAddress",
+      "value": {
+        "street1": "1 Market St",
+        "street2": "Suite 402",
+        "city": "San Francisco",
+        "state": "CA",
+        "postalCode": "94105",
+        "country": "US"
+      }
+    }
+  ]
+};
+
 const wyre = new WyreClient({
   format: 'json_numberstring',
   apiKey: 'AK-GWJMFWA7-43E2YTQG-28NEUVWV-RBLRGUHC',
@@ -11,12 +38,16 @@ const wyre = new WyreClient({
 });
 
 async function getAccount() {
-  try {
     const account = await wyre.get('v2/account');
-    console.log('I am Wyre account', account.id);
-  } catch (err) {
-    console.log('Problems:', err);
-  }
+    return account.id;
+}
+
+async function createPaymentMethod() {
+  return wyre.post('v2/paymentMethods', {
+    publicToken: 'public-sandbox-c78b1564-44c9-426a-9ea3-3fdadcba2e10|AGdQ3KZwl9tdaedkMZAduw8vJD5GvyU1N48Zj',
+    paymentMethodType: 'LOCAL_TRANSFER',
+    country: 'US'
+  });
 }
 
 async function getWallets() {
@@ -32,4 +63,25 @@ async function getListPaymentMethods() {
   console.log('Payment methods', paymentMethods);
 }
 
-getListPaymentMethods();
+async function transfer() {
+  
+}
+
+async function createAccount() {
+  return  wyre.post('v3/accounts', {
+    type: 'INDIVIDUAL',
+    country: 'PL',
+    profileFields: [account]
+  });
+}
+
+const start = async () => {
+  try {
+    const result = await createAccount();
+    console.log(result);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+start();
