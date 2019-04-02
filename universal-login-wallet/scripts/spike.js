@@ -3,8 +3,7 @@ const WyreClient = require('@wyre/api').WyreClient;
 const WYRE_TEST_API = 'https://api.testwyre.com';
 const WYRE_API = 'https://api.sendwyre.com';
 
-const wyre = new WyreClient({ format: 'json_numberstring', apiKey: 'AK-9F9MDBJ7-GGM9VUGT-8FM349EY-79GJBNFH', secretKey: 'SK-NYPHV84Y-JUCU8TXQ-R26JBGMB-LM3FUXZ6', baseUrl: WYRE_TEST_API});
-
+const wyre = new WyreClient({ format: 'json_numberstring', apiKey: 'AK-9F9MDBJ7-GGM9VUGT-8FM349EY-79GJBNFH', secretKey: 'SK-NYPHV84Y-JUCU8TXQ-R26JBGMB-LM3FUXZ6', baseUrl: WYRE_API});
 
 const createAccountBody = {
   "type":"INDIVIDUAL",
@@ -79,4 +78,4 @@ function createPaymentMethod() {
 }
 
 
-getWallets();
+getAccount();
