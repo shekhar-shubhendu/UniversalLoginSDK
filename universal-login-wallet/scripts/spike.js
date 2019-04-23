@@ -3,7 +3,7 @@ const WyreClient = require('@wyre/api').WyreClient;
 const WYRE_TEST_API = 'https://api.testwyre.com';
 const WYRE_API = 'https://api.sendwyre.com';
 
-const wyre = new WyreClient({ format: 'json_numberstring', apiKey: 'AK-9F9MDBJ7-GGM9VUGT-8FM349EY-79GJBNFH', secretKey: 'SK-NYPHV84Y-JUCU8TXQ-R26JBGMB-LM3FUXZ6', baseUrl: WYRE_TEST_API});
+const wyre = new WyreClient({ format: 'json_numberstring', apiKey: 'AK-GWJMFWA7-43E2YTQG-28NEUVWV-RBLRGUHC', secretKey: 'SK-J93RNRUQ-DJJPPHDB-EV2YC9W9-JNTDAEQ8', baseUrl: WYRE_TEST_API});
 
 const createAccountBody = {
   "type":"INDIVIDUAL",
@@ -65,7 +65,7 @@ function getBankInfo() {
 
 function createPaymentMethod() {
   const exampleJSON = {
-    "publicToken": "public-sandbox-c78b1564-44c9-426a-9ea3-3fdadcba2e10|AGdQ3KZwl9tdaedkMZAduw8vJD5GvyU1N48Zj",
+    "publicToken": "public-sandbox-84bdd046-51cb-4bbe-88a4-4db7195519d2|zWb4oeqB6PS3n1D64N4mhkBeomzkBJfoyr77e",
     "paymentMethodType": "LOCAL_TRANSFER",
     "country": "US"
   };
@@ -77,5 +77,29 @@ function createPaymentMethod() {
   });
 }
 
+const paymentMethodId = 'PA_3BQEF24CT4C';
 
-getAccount();
+
+
+
+function createTransfer() {
+  const transferJSON = {
+    "source":"account:AC_ZMQDYZ3JQJ4",
+    "sourceCurrency":"USD",
+    "sourceAmount":"1",
+    "dest":"ethereum:0xE0f31f613862C36F4b49Cb75dDa3f586AdF5a93b",
+    "destCurrency":"ETH",
+    "message": "Payment for DorianNakamoto@sendwyre.com",
+    "autoConfirm":true
+  }
+  wyre.post('/v3/transfers', transferJSON).then((result) => {
+    console.log(result);
+  }, err => {
+    console.log('error', err);
+  })
+}
+
+
+
+
+createTransfer();
