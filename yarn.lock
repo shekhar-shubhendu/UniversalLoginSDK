@@ -558,6 +558,13 @@
     "@webassemblyjs/wast-parser" "1.7.11"
     "@xtuc/long" "4.2.1"
 
+"@wyre/api@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@wyre/api/-/api-1.0.5.tgz#ed50ef19543529f2ffcd491a0e2398b3a06593d8"
+  dependencies:
+    es6-shim "0.35.3"
+    request "2.88.0"
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -3731,7 +3738,6 @@ ens-builder@^2.0.0:
 ens-builder@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/ens-builder/-/ens-builder-2.0.1.tgz#bf19f07cfb7a0ea294138f0850f616d3b35d67f0"
-  integrity sha512-f6+JgRCT9bSVNB4bbRme57/xHoKRwvsi/xLnXT1JY3tpW9Kdmvz8hryAwRMNY02lBgKyUjtVaT5ak/0WIb6PBg==
   dependencies:
     ethers "^4.0"
 
@@ -3928,6 +3934,10 @@ es6-set@~0.1.5:
     es6-iterator "~2.0.1"
     es6-symbol "3.1.1"
     event-emitter "~0.3.5"
+
+es6-shim@0.35.3:
+  version "0.35.3"
+  resolved "https://registry.yarnpkg.com/es6-shim/-/es6-shim-0.35.3.tgz#9bfb7363feffff87a6cdb6cd93e405ec3c4b6f26"
 
 es6-symbol@3.1.1, es6-symbol@^3.1.1, es6-symbol@~3.1.1:
   version "3.1.1"
@@ -9769,7 +9779,7 @@ request@2.87.0:
     tunnel-agent "^0.6.0"
     uuid "^3.1.0"
 
-request@^2.67.0, request@^2.79.0, request@^2.85.0, request@^2.87.0, request@^2.88.0:
+request@2.88.0, request@^2.67.0, request@^2.79.0, request@^2.85.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   dependencies:
