@@ -24,7 +24,7 @@
     "build": "tsc --build tsconfig.json",
     "lint": "tslint -p tsconfig.json \"{lib,test}/**/*.{ts,tsx}\"",
     "test": "yarn build && yarn test:nobuild",
-    "test:nobuild": "cross-env NODE_ENV=test mocha -t 10000 \"dist/test/**/*.js\"",
+    "test:nobuild": "cross-env NODE_ENV=test mocha \"dist/test/**/*.js\"",
     "clean": "rimraf dist"
   },
   "devDependencies": {
@@ -37,7 +37,7 @@
     "cross-env": "^5.2.0",
     "ethereum-waffle": "2.0.15",
     "ganache-core": "^2.2.1",
-    "mocha": "^5.2.0",
+    "mocha": "^6.1.4",
     "node-fetch": "^2.6.0",
     "rimraf": "^2.6.3",
     "sinon": "^6.3.1",
