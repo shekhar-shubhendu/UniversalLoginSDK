@@ -1,38 +1,46 @@
 import React, {useState} from 'react';
 import {TransferDropdown} from './TransferDropdown';
-import UniversalLoginSDK from '@universal-login/sdk';
-import {TransferDetails, TokenDetailsWithBalance, getBalanceOf} from '@universal-login/commons';
+import UniversalLoginSDK, {getTransactionFee} from '@universal-login/sdk';
+import {TransferDetails, TokenDetailsWithBalance, getBalanceOf, ApplicationWallet, waitUntil} from '@universal-login/commons';
 import './../../styles/transferAmount.css';
 import './../../styles/transferAmountDefaults.css';
 import {getStyleForTopLevelComponent} from '../../../core/utils/getStyleForTopLevelComponent';
 import {useAsyncEffect} from '../../hooks/useAsyncEffect';
+import {utils} from 'ethers';
 
 export interface TransferAmountProps {
   sdk: UniversalLoginSDK;
-  ensName: string;
+  applicationWallet: ApplicationWallet;
+  transferDetails: TransferDetails;
   onSelectRecipientClick: () => void;
   updateTransferDetailsWith: (transferDetails: Partial<TransferDetails>) => void;
   currency: string;
   transferAmountClassName?: string;
 }
 
-export const TransferAmount = ({sdk, ensName, onSelectRecipientClick, updateTransferDetailsWith, currency, transferAmountClassName}: TransferAmountProps) => {
-  const [tokenDetailsWithBalance, setTokenDetailsWithBalance] = useState<TokenDetailsWithBalance[]>([]);
-  const [isAmountCorrect, setIsAmountCorrect] = useState(false);
-  const [amount, setAmount] = useState('');
+export const TransferAmount = ({sdk, applicationWallet, transferDetails, onSelectRecipientClick, updateTransferDetailsWith, currency, transferAmountClassName}: TransferAmountProps) => {
+  const amount = transferDetails.amount;
 
-  useAsyncEffect(() => sdk.subscribeToBalances(ensName, setTokenDetailsWithBalance), []);
+  const [tokenDetailsWithBalance, setTokenDetailsWithBalance] = useState<TokenDetailsWithBalance[]>([]);
+  useAsyncEffect(() => sdk.subscribeToBalances(applicationWallet.name, setTokenDetailsWithBalance), []);
+
   const balance = getBalanceOf(currency, tokenDetailsWithBalance);
 
-  const validateAndUpdateTransferDetails = (amount: string) => {
-    if (balance && amount) {
-      setIsAmountCorrect(amount <= balance);
+  const onClickMaxAmount = async () => {
+    await waitUntil(() => !!balance);
+    if (utils.parseEther(balance!).eq(0)) {
+      updateTransferDetailsWith({amount: '0'});
     } else {
-      setIsAmountCorrect(false);
+      const transactionFee = await getTransactionFee(sdk, applicationWallet, {...transferDetails, amount: balance!});
+      const amountMinusFee = (utils.parseEther(balance!)).sub(transactionFee!);
+      if (amountMinusFee!.lte(0)) {
+        updateTransferDetailsWith({amount: '0'});
+      }
+      updateTransferDetailsWith({amount: utils.formatEther(amountMinusFee.toString())});
     }
-    setAmount(amount);
-    updateTransferDetailsWith({amount});
   };
+
+  const isAmountCorrect = balance && amount && amount <= balance || false;
 
   return (
     <div className="universal-login-amount">
@@ -47,15 +55,15 @@ export const TransferAmount = ({sdk, ensName, onSelectRecipientClick, updateTran
         />
         <div className="transfer-amount-row">
           <label className="transfer-amount-label" htmlFor="amount-eth">How much are you sending?</label>
-          <button id="max-button" className="transfer-amount-max" onClick={() => validateAndUpdateTransferDetails(balance!)}>Max</button>
+          <button id="max-button" className="transfer-amount-max" onClick={() => onClickMaxAmount()}>Max</button>
         </div>
         <div className="transfer-amount-input-wrapper">
           <input
             id="amount-eth"
             type="number"
             className="transfer-amount-input"
-            onChange={event => validateAndUpdateTransferDetails(event.target.value)}
-            value={amount}
+            onChange={event => updateTransferDetailsWith({amount: event.target.value})}
+            value={amount || ''}
           />
           <span className="transfer-amount-code">{currency}</span>
         </div>

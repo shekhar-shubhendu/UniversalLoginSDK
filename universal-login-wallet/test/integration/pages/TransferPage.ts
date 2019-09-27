@@ -17,7 +17,6 @@ export default class TransferPage {
   }
 
   enterTransferAmount(amount: string) {
-    this.appWrapper.find('#max-button').simulate('click');
     const amountInput = this.appWrapper.find('input#amount-eth');
     amountInput.simulate('change', {target: {value: amount}});
     this.clickSelectRecipient();
@@ -32,7 +31,8 @@ export default class TransferPage {
     this.appWrapper.find('#select-recipient').simulate('click');
   }
 
-  clickMaxAmountButton() {
+  async clickMaxAmountButton() {
     this.appWrapper.find('#max-button').simulate('click');
+    await waitForUI(this.appWrapper, () => !!this.appWrapper.find('input#amount-eth').props().value);
   }
 }

@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {ReactWrapper} from 'enzyme';
-import {providers, utils, Contract} from 'ethers';
+import {providers, utils, Contract, Wallet} from 'ethers';
 import {createFixtureLoader, getWallets, createMockProvider} from 'ethereum-waffle';
 import {TEST_ACCOUNT_ADDRESS} from '@universal-login/commons';
 import {deployMockToken} from '@universal-login/commons/testutils';
@@ -20,9 +20,10 @@ describe('UI: Transfer', () => {
   let provider: providers.Provider;
   let mockTokenContract: Contract;
   const receiverAddress = TEST_ACCOUNT_ADDRESS;
+  let wallet: Wallet;
 
   beforeEach(async () => {
-    const [wallet] = await getWallets(createMockProvider());
+    [wallet] = getWallets(createMockProvider());
     ({relayer, provider} = await setupSdk(wallet, '33113'));
     ({mockTokenContract} = await createFixtureLoader(provider as providers.Web3Provider)(deployMockToken));
     ({appWrapper, appPage, services} = await setupUI(relayer, mockTokenContract.address));
@@ -43,13 +44,13 @@ describe('UI: Transfer', () => {
   it('Creates wallet and transfers max amount of ethers', async () => {
     appPage.dashboard().clickTransferButton();
     await appPage.transfer().chooseCurrency('ETH');
-    appPage.transfer().clickMaxAmountButton();
+    await appPage.transfer().clickMaxAmountButton();
     appPage.transfer().clickSelectRecipient();
-    appPage.transfer().enterRecipient(receiverAddress);
+    appPage.transfer().enterRecipient(wallet.address);
     appPage.transfer().transfer();
     await appPage.dashboard().waitForHideModal();
     const amountLeft = appPage.dashboard().getWalletBalance().replace('$', '');
-    expect(Number(amountLeft)).to.be.lt(0.000004);
+    expect(Number(amountLeft)).to.be.lt(0.00005);
   });
 
   afterEach(async () => {

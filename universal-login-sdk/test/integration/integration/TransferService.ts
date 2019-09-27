@@ -57,28 +57,6 @@ describe('INT: TransferService', () => {
     expect(await provider.getBalance(to)).to.eq(utils.parseEther(amount));
   });
 
-  it('Should transfer maximum amount of ether', async () => {
-    const address = walletService.getDeployedWallet().contractAddress;
-    const balance = await provider.getBalance(address);
-    const to = TEST_ACCOUNT_ADDRESS;
-    const amount = utils.formatEther((balance.toString()));
-    const currency = ETHER_NATIVE_TOKEN.symbol;
-    const {waitToBeSuccess} = await transferService.transfer({to, amount, currency});
-    await waitToBeSuccess();
-    expect((await provider.getBalance(to)).gt(utils.parseEther('1.99'))).to.be.true;
-  });
-
-  it('Should transfer maximum amount of token', async () => {
-    const address = walletService.getDeployedWallet().contractAddress;
-    const balance = await mockTokenContract.balanceOf(address);
-    const to = TEST_ACCOUNT_ADDRESS;
-    const amount = utils.formatEther((balance.toString()));
-    const currency = 'Mock';
-    const {waitToBeSuccess} = await transferService.transfer({to, amount, currency});
-    await waitToBeSuccess();
-    expect((await mockTokenContract.balanceOf(to)).gt(utils.parseEther('1.99'))).to.be.true;
-  });
-
   it('Should throw error if invalid address', async () => {
     const to = `${TEST_ACCOUNT_ADDRESS}3`;
     const amount = '0.5';
