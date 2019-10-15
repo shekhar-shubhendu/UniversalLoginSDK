@@ -143,7 +143,7 @@ export const Dashboard = ({deployedWallet}: DashboardProps) => {
                 </Route>
                 <Route path="/dashboard/devices" exact>
                   <DialogWrapper message={notice} ensName={name}>
-                    <Devices deployedWallet={deployedWallet}/>
+                    <Devices deployedWallet={deployedWallet} onDeleteAccountClick={() => setDashboardVisibility(false)} />
                   </DialogWrapper>
                 </Route>
                 <Route path="/dashboard/backup" exact>

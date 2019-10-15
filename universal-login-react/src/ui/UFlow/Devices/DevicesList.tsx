@@ -7,7 +7,6 @@ import {NewDeviceMessage} from './NewDeviceMessage';
 import {ConnectedDevices} from './ConnectedDevices';
 import {useAsync} from '../../hooks/useAsync';
 import {devicesContentType} from './Devices';
-import {FeatureFlag} from '../../commons/FeatureFlag';
 import Spinner from '../../commons/Spinner';
 
 export interface DevicesListProps {
@@ -35,9 +34,7 @@ export const DevicesList = ({setDevicesContent, deployedWallet, className}: Devi
               />
               : <Spinner className="spinner-center"/>}
           </div>
-          <FeatureFlag sdk={deployedWallet.sdk} feature="deleteAccount">
-            <button onClick={() => setDevicesContent('deleteAccount')} className="delete-account-link">Delete account</button>
-          </FeatureFlag>
+          <button onClick={() => setDevicesContent('deleteAccount')} className="delete-account-link">Delete account</button>
         </div>
       </div>
     </div>

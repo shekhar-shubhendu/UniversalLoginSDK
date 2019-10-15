@@ -7,12 +7,13 @@ import {ConnectionSuccessNotification} from '../../Notifications/ConnectionSucce
 
 export interface DevicesProps {
   deployedWallet: DeployedWallet;
+  onDeleteAccountClick: () => void;
   className?: string;
 }
 
 export type devicesContentType = 'devices' | 'approveDevice' | 'deleteAccount' | 'connectionSuccess';
 
-export const Devices = ({deployedWallet, className}: DevicesProps) => {
+export const Devices = ({deployedWallet, onDeleteAccountClick, className}: DevicesProps) => {
   const [devicesContent, setDevicesContent] = useState<devicesContentType>('devices');
 
   switch (devicesContent) {
@@ -40,8 +41,9 @@ export const Devices = ({deployedWallet, className}: DevicesProps) => {
     case 'deleteAccount':
       return (
         <DeleteAccount
+          deployedWallet={deployedWallet}
+          onDeleteAccountClick={() => onDeleteAccountClick}
           onCancelClick={() => setDevicesContent('devices')}
-          onConfirmDeleteClick={() => {}}
           className={className}
         />
       );
