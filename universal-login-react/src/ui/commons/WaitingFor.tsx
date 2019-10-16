@@ -6,25 +6,46 @@ import {Spinner} from './Spinner';
 import {getStyleForTopLevelComponent} from '../../core/utils/getStyleForTopLevelComponent';
 import '../styles/waitingFor.sass';
 import '../styles/waitingForDefault.sass';
+import {OnRampProviderName, getOnRampProviderLogo} from '../TopUp/Fiat/getOnRampProviderLogo';
 
-export interface WaitingForTransactionProps {
-  action: string;
+export interface WaitingForTransactionProps extends WaitingForProps {
   relayerConfig: PublicRelayerConfig;
   transactionHash?: string;
+}
+
+export interface WaitingForOnRampProviderProps {
+  onRampProviderName: OnRampProviderName;
+  className?: string;
+}
+
+export interface WaitingForProps {
+  action?: string;
   children?: ReactNode;
   className?: string;
 }
 
-const renderWaitingForTransaction = (action: string, relayerConfig: PublicRelayerConfig, transactionHash?: string, children?: ReactNode) => {
+export const WaitingFor = ({action, children, className} : WaitingForProps) => {
   return (
-    <div>
-      <div className="action-title-box">
-        <h1 className="action-title">{action}</h1>
-      </div>
-      <div>
+    <div className="universal-login-waiting-for">
+      <div className={getStyleForTopLevelComponent(className)}>
+        <div className="action-title-box">
+        {action && <h1 className="action-title">{action}</h1>}
+        </div>
         {children}
         <div className="modal-pending-section">
           <ProgressBar className="pending-bar"/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const renderWaitingForTransaction = ({action, relayerConfig, transactionHash, children}: WaitingForTransactionProps) => {
+  return (
+    <div>
+      <WaitingFor action={action} children={children}/>
+      <div>
+        <div className="modal-pending-section">
           <h3 className="transaction-hash-title">Transaction hash</h3>
           <ExplorerLink chainName={relayerConfig.chainSpec.name} transactionHash={transactionHash} />
         </div>
@@ -38,8 +59,21 @@ export const WaitingForTransaction = ({action, relayerConfig, transactionHash, c
   return (
     <div className="universal-login-waiting-for-transaction">
       <div className={getStyleForTopLevelComponent(className)}>
-        {relayerConfig ? renderWaitingForTransaction(action, relayerConfig, transactionHash, children) : <Spinner className="waiting-for-spinner" />}
+        {relayerConfig ? renderWaitingForTransaction({action, relayerConfig, transactionHash, children}) : <Spinner className="waiting-for-spinner" />}
       </div>
     </div>
   );
 };
+
+export const WaitingForOnRampProvider = ({className, onRampProviderName}: WaitingForOnRampProviderProps) => {
+  const onRampProviderLogo = getOnRampProviderLogo(onRampProviderName, 'white');
+  const note = `Waiting for ${onRampProviderName} to send you money`;
+  return (
+    <div className="universal-login-waiting-for-on-ramp-provider">
+      <div className={getStyleForTopLevelComponent(className)}>
+        <img src={onRampProviderLogo}/>
+        <WaitingFor action={note} className={className}/>
+      </div>
+    </div>
+  );
+}
