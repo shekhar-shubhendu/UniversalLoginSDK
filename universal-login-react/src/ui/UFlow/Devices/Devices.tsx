@@ -42,7 +42,7 @@ export const Devices = ({deployedWallet, onDeleteAccountClick, className}: Devic
       return (
         <DeleteAccount
           deployedWallet={deployedWallet}
-          onDeleteAccountClick={() => onDeleteAccountClick}
+          onDeleteAccountClick={() => onDeleteAccountClick()}
           onCancelClick={() => setDevicesContent('devices')}
           className={className}
         />
