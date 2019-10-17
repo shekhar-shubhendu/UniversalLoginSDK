@@ -1,20 +1,21 @@
 import React, {useState} from 'react';
 import {DevicesList} from './DevicesList';
-import {DeployedWallet} from '@universal-login/sdk';
+import {WalletService} from '@universal-login/sdk';
 import {ConnectionNotification} from '../../Notifications/ConnectionNotification';
 import {DeleteAccount} from '../DeleteAccount';
 import {ConnectionSuccessNotification} from '../../Notifications/ConnectionSuccessNotification';
 
 export interface DevicesProps {
-  deployedWallet: DeployedWallet;
+  walletService: WalletService;
   onDeleteAccountClick: () => void;
   className?: string;
 }
 
 export type devicesContentType = 'devices' | 'approveDevice' | 'deleteAccount' | 'connectionSuccess';
 
-export const Devices = ({deployedWallet, onDeleteAccountClick, className}: DevicesProps) => {
+export const Devices = ({walletService, onDeleteAccountClick, className}: DevicesProps) => {
   const [devicesContent, setDevicesContent] = useState<devicesContentType>('devices');
+  const deployedWallet = walletService.getDeployedWallet();
 
   switch (devicesContent) {
     case 'devices':
@@ -41,7 +42,7 @@ export const Devices = ({deployedWallet, onDeleteAccountClick, className}: Devic
     case 'deleteAccount':
       return (
         <DeleteAccount
-          deployedWallet={deployedWallet}
+          walletService={walletService}
           onDeleteAccountClick={() => onDeleteAccountClick()}
           onCancelClick={() => setDevicesContent('devices')}
           className={className}
