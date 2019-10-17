@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {ModalWrapper} from './ModalWrapper';
-import {WaitingForTransaction, WaitingForTransactionProps} from '../commons/WaitingFor';
+import {WaitingForTransaction, WaitingForTransactionProps, WaitingForOnRampProviderProps, WaitingForOnRampProvider} from '../commons/WaitingFor';
 import {ReactModalContext, TopUpProps, ConnectionFlowProps} from '../../core/models/ReactModalContext';
 import {TopUp} from '../TopUp/TopUp';
 import {ConnectionFlow} from '../ConnectionFlow';
@@ -37,6 +37,12 @@ const Modals = ({modalClassName}: ModalsProps) => {
           />
         </ModalWrapper>
       );
+    case 'waitingForOnRampProvider':
+      return (
+        <ModalWrapper>
+          <WaitingForOnRampProvider {...modalService.modalProps as WaitingForOnRampProviderProps}/>
+        </ModalWrapper>
+      )
     default:
       return null;
   }
