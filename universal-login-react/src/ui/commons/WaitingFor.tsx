@@ -6,16 +6,10 @@ import {Spinner} from './Spinner';
 import {getStyleForTopLevelComponent} from '../../core/utils/getStyleForTopLevelComponent';
 import '../styles/waitingFor.sass';
 import '../styles/waitingForDefault.sass';
-import {OnRampProviderName, getOnRampProviderLogo} from '../TopUp/Fiat/getOnRampProviderLogo';
 
 export interface WaitingForTransactionProps extends WaitingForProps {
   relayerConfig: PublicRelayerConfig;
   transactionHash?: string;
-}
-
-export interface WaitingForOnRampProviderProps {
-  onRampProviderName: OnRampProviderName;
-  className?: string;
 }
 
 export interface WaitingForProps {
@@ -65,15 +59,3 @@ export const WaitingForTransaction = ({action, relayerConfig, transactionHash, c
   );
 };
 
-export const WaitingForOnRampProvider = ({className, onRampProviderName}: WaitingForOnRampProviderProps) => {
-  const onRampProviderLogo = getOnRampProviderLogo(onRampProviderName, 'white');
-  const note = `Waiting for ${onRampProviderName} to send you money`;
-  return (
-    <div className="universal-login-waiting-for-on-ramp-provider">
-      <div className={getStyleForTopLevelComponent(className)}>
-        <img src={onRampProviderLogo}/>
-        <WaitingFor action={note} className={className}/>
-      </div>
-    </div>
-  );
-};
